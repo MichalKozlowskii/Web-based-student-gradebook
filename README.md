@@ -23,7 +23,7 @@ The system consists of 7 backend components built with Spring Boot — 6 microse
 1. Clone the repo.
 2. Navigate to `docker-compose` directory.
 3. Generate RSA key pair in `docker-compose/keys` directory.
-4. Generate TLS certificate in `docker-compose/certs` directory.
+4. Generate TLS certificate in `docker-compose/nginx/certs` directory.
 5. Create and fill up `.env` file (see `.env.example` for required fields).
 6. Run the containers using a command `docker compose up -d`.
 
@@ -33,7 +33,4 @@ The system consists of 7 backend components built with Spring Boot — 6 microse
 `openssl rsa -in private.pem -pubout -out public.pem`
 
 ### Dummy TLS certificate generation
-`mkdir -p ./certs && openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
-  -keyout ./certs/privkey.pem \
-  -out ./certs/fullchain.pem \
-  -subj "/C=US/ST=Dev/L=Local/O=Dev/CN=localhost"`
+`openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout privkey.pem -out fullchain.pem -subj "/C=US/ST=Dev/L=Local/O=Dev/CN=localhost"`
