@@ -1,0 +1,99 @@
+{{- define "common.deployment" -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.deploymentName }}
+  labels:
+    app: {{ .Values.appLabel }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Values.appLabel }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.appLabel }}
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "{{ .Values.containerPort }}"
+        prometheus.io/path: "/actuator/prometheus"
+    spec:
+      containers:
+        - name: {{ .Values.serviceName }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          ports:
+            - containerPort: {{ .Values.containerPort }}
+              protocol: TCP
+          env:
+          {{- if .Values.appname_enabled }}
+          - name: SPRING_APPLICATION_NAME
+            value: {{ .Values.appName }}
+          {{- end }}
+          {{- if .Values.otel_enabled }}
+          - name: JAVA_TOOL_OPTIONS
+            valueFrom:
+              configMapKeyRef:
+                name: {{ .Values.global.configMapName }}
+                key: JAVA_TOOL_OPTIONS
+          - name: OTEL_EXPORTER_OTLP_ENDPOINT
+            valueFrom:
+              configMapKeyRef:
+                name: {{ .Values.global.configMapName }}
+                key: OTEL_EXPORTER_OTLP_ENDPOINT
+          - name: OTEL_METRICS_EXPORTER
+            valueFrom:
+              configMapKeyRef:
+                name: {{ .Values.global.configMapName }}
+                key: OTEL_METRICS_EXPORTER
+          - name: OTEL_LOGS_EXPORTER
+            valueFrom:
+              configMapKeyRef:
+                name: {{ .Values.global.configMapName }}
+                key: OTEL_LOGS_EXPORTER
+          - name: OTEL_SERVICE_NAME
+            value: {{ .Values.appName }}
+          {{- end }}
+          {{- if .Values.resourceserver_enabled }}
+          - name: SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK-SET-URI
+            valueFrom:
+              configMapKeyRef:
+                name: {{ .Values.global.configMapName }}
+                key: SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK-SET-URI
+          {{- end }}
+          {{- if .Values.database_enabled }}
+          - name: SPRING_DATASOURCE_URL
+            value: {{ .Values.database.datasourceUrl }}
+          - name: SPRING_DATASOURCE_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Values.database.secretName }}
+                key: MYSQL_ROOT_PASSWORD
+          {{- end }}
+          {{- if .Values.azure_vision_enabled }}
+          - name: AZURE_VISION_ENDPOINT
+            value: {{ .Values.azureVisionEndpoint }}
+          - name: AZURE_VISION_KEY
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Values.azureVisionSecretName }}
+                key: AZURE_VISION_KEY
+          {{- end }}
+          {{- if .Values.redis_enabled }}
+          - name: SPRING_DATA_REDIS_HOST
+            valueFrom:
+              configMapKeyRef:
+                name: {{ .Values.global.configMapName }}
+                key: SPRING_DATA_REDIS_HOST
+          - name: SPRING_DATA_REDIS_PORT
+            valueFrom:
+              configMapKeyRef:
+                name: {{ .Values.global.configMapName }}
+                key: SPRING_DATA_REDIS_PORT
+          - name: SPRING_DATA_REDIS_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Values.global.redisSecretName }}
+                key: SPRING_DATA_REDIS_PASSWORD
+          {{- end }}
+{{- end -}}

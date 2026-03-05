@@ -1,0 +1,31 @@
+replicaCount: 1
+
+image:
+  repository: grafana/grafana
+  tag: "11.4.0"
+  pullPolicy: IfNotPresent
+
+service:
+  type: LoadBalancer
+  port: 3000
+
+grafana:
+  adminUser: admin
+  adminPassword: admin
+  anonymousEnabled: false
+
+datasources:
+  prometheus:
+    url: http://kube-prometheus:9090
+  tempo:
+    url: http://grafana-tempo:3100
+  loki:
+    url: http://grafana-loki-gateway:80
+
+resources: {}
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}

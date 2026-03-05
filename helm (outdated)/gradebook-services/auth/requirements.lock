@@ -1,0 +1,6 @@
+dependencies:
+- name: gradebook-common
+  repository: file://../../gradebook-common
+  version: 0.1.0
+digest: sha256:4b080da733e5ddde5f7bb6d87c25fc4856ad4f82558664d8d090bd4a082d4bd8
+generated: "2026-02-13T19:14:14.3158827+01:00"

@@ -1,0 +1,15 @@
+{{- define "common.mysql-service" -}}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.database.serviceName }}
+spec:
+  selector:
+    app: {{ .Values.database.appLabel }}
+  type: ClusterIP
+  ports:
+    - name: mysql
+      protocol: TCP
+      port: 3306
+      targetPort: 3306
+{{- end -}}

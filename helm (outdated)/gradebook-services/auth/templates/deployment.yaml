@@ -1,0 +1,114 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.deploymentName }}
+  labels:
+    app: {{ .Values.appLabel }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Values.appLabel }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.appLabel }}
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "{{ .Values.containerPort }}"
+        prometheus.io/path: "/actuator/prometheus"
+    spec:
+      containers:
+        - name: {{ .Values.serviceName }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          ports:
+            - containerPort: {{ .Values.containerPort }}
+              protocol: TCP
+          volumeMounts:
+            - name: auth-keys
+              mountPath: /app/keys
+              readOnly: true
+          env:
+          {{- if .Values.appname_enabled }}
+          - name: SPRING_APPLICATION_NAME
+            value: {{ .Values.appName }}
+          {{- end }}
+          {{- if .Values.otel_enabled }}
+          - name: JAVA_TOOL_OPTIONS
+            valueFrom:
+              configMapKeyRef:
+                name: {{ .Values.global.configMapName }}
+                key: JAVA_TOOL_OPTIONS
+          - name: OTEL_EXPORTER_OTLP_ENDPOINT
+            valueFrom:
+              configMapKeyRef:
+                name: {{ .Values.global.configMapName }}
+                key: OTEL_EXPORTER_OTLP_ENDPOINT
+          - name: OTEL_METRICS_EXPORTER
+            valueFrom:
+              configMapKeyRef:
+                name: {{ .Values.global.configMapName }}
+                key: OTEL_METRICS_EXPORTER
+          - name: OTEL_LOGS_EXPORTER
+            valueFrom:
+              configMapKeyRef:
+                name: {{ .Values.global.configMapName }}
+                key: OTEL_LOGS_EXPORTER
+          - name: OTEL_SERVICE_NAME
+            value: {{ .Values.appName }}
+          {{- end }}
+          {{- if .Values.database_enabled }}
+          - name: SPRING_DATASOURCE_URL
+            value: {{ .Values.database.datasourceUrl }}
+          - name: SPRING_DATASOURCE_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Values.database.secretName }}
+                key: MYSQL_ROOT_PASSWORD
+          {{- end }}
+          - name: AUTH_ENCRYPTION_KEY
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Values.authEncryptionSecretName }}
+                key: AUTH_ENCRYPTION_KEY
+          - name: AUTH_KEYS_PRIVATE_KEY_PATH
+            value: /app/keys/private.pem
+          - name: AUTH_KEYS_PUBLIC_KEY_PATH
+            value: /app/keys/public.pem
+          - name: USOS_CONSUMERKEY
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Values.usosSecretName }}
+                key: USOS_CONSUMERKEY
+          - name: USOS_CONSUMERSECRET
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Values.usosSecretName }}
+                key: USOS_CONSUMERSECRET
+          - name: USOS_CALLBACK
+            value: {{ .Values.usosCallback | quote }}
+          - name: FRONTEND_SUCCESS_URL
+            value: {{ .Values.frontendSuccessUrl | quote }}
+          - name: FRONTEND_ERROR_URL
+            value: {{ .Values.frontendErrorUrl | quote }}
+          {{- if .Values.redis_enabled }}
+          - name: SPRING_DATA_REDIS_HOST
+            valueFrom:
+              configMapKeyRef:
+                name: {{ .Values.global.configMapName }}
+                key: SPRING_DATA_REDIS_HOST
+          - name: SPRING_DATA_REDIS_PORT
+            valueFrom:
+              configMapKeyRef:
+                name: {{ .Values.global.configMapName }}
+                key: SPRING_DATA_REDIS_PORT
+          - name: SPRING_DATA_REDIS_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Values.global.redisSecretName }}
+                key: SPRING_DATA_REDIS_PASSWORD
+          {{- end }}
+      volumes:
+        - name: auth-keys
+          secret:
+            secretName: {{ .Values.authKeysSecretName }}

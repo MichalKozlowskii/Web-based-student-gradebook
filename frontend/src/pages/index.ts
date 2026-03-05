@@ -1,0 +1,9 @@
+export { LoginPage } from "./LoginPage";
+export { DashboardPage } from "./DashboardPage";
+export { LoginSuccessPage } from "./LoginSuccessPage";
+export { LoginErrorPage } from "./LoginErrorPage";
+export { UnauthorizedPage } from "./UnauthorizedPage";
+export { ExamsPage } from "./ExamsPage";
+export { ExamDetailPage } from "./ExamDetailPage";
+export { CoursePerformancePage } from "./CoursePerformancePage";
+export { CourseManagePage } from "./CourseManagePage";

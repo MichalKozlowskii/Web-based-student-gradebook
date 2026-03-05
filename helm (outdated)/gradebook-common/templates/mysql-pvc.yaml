@@ -1,0 +1,14 @@
+{{- define "common.mysql-pvc" -}}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ .Values.database.appLabel }}-pvc
+  labels:
+    app: {{ .Values.database.appLabel }}
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .Values.database.storageSize | default "1Gi" }}
+{{- end -}}

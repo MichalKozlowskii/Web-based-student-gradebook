@@ -1,0 +1,23 @@
+deploymentName: gatewayserver-deployment
+serviceName: gatewayserver
+appLabel: gateway_server
+appName: gateway_server
+
+replicaCount: 1
+
+image:
+  repository: student_gradebook/gateway
+  tag: prod
+
+containerPort: 8080
+
+service:
+  type: ClusterIP
+  port: 8080
+  targetPort: 8080
+
+appname_enabled: true
+otel_enabled: true
+resourceserver_enabled: true
+redis_enabled: true
+database_enabled: false

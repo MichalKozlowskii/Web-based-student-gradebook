@@ -1,0 +1,39 @@
+deploymentName: exams-deployment
+serviceName: exams
+appLabel: exams_service
+appName: exams_service
+
+replicaCount: 1
+
+image:
+  repository: student_gradebook/exams_service
+  tag: prod
+
+containerPort: 9030
+
+service:
+  type: ClusterIP
+  port: 9030
+  targetPort: 9030
+
+appname_enabled: true
+otel_enabled: true
+resourceserver_enabled: true
+redis_enabled: false
+database_enabled: true
+
+database:
+  deploymentName: examsdb-deployment
+  serviceName: examsdb
+  appLabel: examsdb
+  name: examsdb
+  secretName: examsdb-secret
+  rootPassword: ""
+  datasourceUrl: "jdbc:mysql://examsdb:3306/examsdb"
+  image:
+    repository: mysql
+    tag: "8.0"
+azure_vision_enabled: true
+azureVisionEndpoint: ""
+azureVisionSecretName: azure-vision-secret
+azureVisionKey: ""

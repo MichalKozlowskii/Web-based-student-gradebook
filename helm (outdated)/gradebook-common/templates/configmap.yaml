@@ -1,0 +1,14 @@
+{{- define "common.configmap" -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.global.configMapName }}
+data:
+  SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK-SET-URI: "{{ .Values.global.jwkSetUri }}"
+  SPRING_DATA_REDIS_HOST: "{{ .Values.global.redisHost }}"
+  SPRING_DATA_REDIS_PORT: "{{ .Values.global.redisPort }}"
+  JAVA_TOOL_OPTIONS: "{{ .Values.global.openTelemetryJavaAgent }}"
+  OTEL_EXPORTER_OTLP_ENDPOINT: "{{ .Values.global.otelExporterEndPoint }}"
+  OTEL_METRICS_EXPORTER: "{{ .Values.global.otelMetricsExporter }}"
+  OTEL_LOGS_EXPORTER: "{{ .Values.global.otelLogsExporter }}"
+{{- end -}}

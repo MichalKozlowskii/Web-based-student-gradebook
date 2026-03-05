@@ -1,0 +1,11 @@
+# Your DuckDNS domain, e.g. student-gradebook.duckdns.org
+domain: "CHANGE_ME.duckdns.org"
+
+# Email for Let's Encrypt notifications
+email: "CHANGE_ME@gmail.com"
+
+# Use letsencrypt-staging for testing, letsencrypt-prod for real cert
+issuer: letsencrypt-prod
+
+# Ingress class: "traefik" for k3s, "nginx" for nginx-ingress
+ingressClass: traefik

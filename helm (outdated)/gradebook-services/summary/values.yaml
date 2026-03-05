@@ -1,0 +1,23 @@
+deploymentName: summary-deployment
+serviceName: summary
+appLabel: summary_service
+appName: summary_service
+
+replicaCount: 1
+
+image:
+  repository: student_gradebook/summary_service
+  tag: prod
+
+containerPort: 9020
+
+service:
+  type: ClusterIP
+  port: 9020
+  targetPort: 9020
+
+appname_enabled: true
+otel_enabled: true
+resourceserver_enabled: true
+redis_enabled: false
+database_enabled: false

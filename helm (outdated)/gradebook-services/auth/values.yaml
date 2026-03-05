@@ -1,0 +1,49 @@
+deploymentName: auth-deployment
+serviceName: auth
+appLabel: auth_server
+appName: auth_server
+
+replicaCount: 1
+
+image:
+  repository: student_gradebook/auth_server
+  tag: prod
+
+containerPort: 8081
+
+service:
+  type: ClusterIP
+  port: 8081
+  targetPort: 8081
+
+appname_enabled: true
+otel_enabled: true
+resourceserver_enabled: false
+redis_enabled: true
+database_enabled: true
+authEncryptionSecretName: auth-encryption-secret
+authEncryptionKey: ""
+
+authKeysSecretName: auth-keys-secret
+authKeys:
+  privateKey: ""
+  publicKey: ""
+
+usosSecretName: usos-secret
+usosConsumerKey: ""
+usosConsumerSecret: ""
+usosCallback: ""
+frontendSuccessUrl: ""
+frontendErrorUrl: ""
+
+database:
+  deploymentName: authdb-deployment
+  serviceName: authdb
+  appLabel: authdb
+  name: authdb
+  secretName: authdb-secret
+  rootPassword: ""
+  datasourceUrl: "jdbc:mysql://authdb:3306/authdb"
+  image:
+    repository: mysql
+    tag: "8.0"

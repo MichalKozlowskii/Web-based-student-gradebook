@@ -1,0 +1,35 @@
+deploymentName: groups-deployment
+serviceName: groups
+appLabel: groups_service
+appName: groups_service
+
+replicaCount: 1
+
+image:
+  repository: student_gradebook/groups_service
+  tag: prod
+
+containerPort: 8090
+
+service:
+  type: ClusterIP
+  port: 8090
+  targetPort: 8090
+
+appname_enabled: true
+otel_enabled: true
+resourceserver_enabled: true
+redis_enabled: false
+database_enabled: true
+
+database:
+  deploymentName: groupsdb-deployment
+  serviceName: groupsdb
+  appLabel: groupsdb
+  name: groupsdb
+  secretName: groupsdb-secret
+  rootPassword: ""
+  datasourceUrl: "jdbc:mysql://groupsdb:3306/groupsdb"
+  image:
+    repository: mysql
+    tag: "8.0"

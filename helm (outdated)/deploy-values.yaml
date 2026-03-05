@@ -1,0 +1,52 @@
+# =============================================================
+# Shared global values - pass this file to EVERY helm install:
+#   helm install <name> ./<chart> -f ../deploy-values.yaml
+# =============================================================
+global:
+  configMapName: "gradebook-configmap"
+  jwkSetUri: "http://auth:8081/jwks.json"
+  redisHost: "redis"
+  redisPort: "6379"
+  redisSecretName: "redis-secret"
+  openTelemetryJavaAgent: "-javaagent:/app/libs/opentelemetry-javaagent-2.22.0.jar"
+  otelExporterEndPoint: "http://grafana-tempo:4318"
+  otelMetricsExporter: "none"
+  otelLogsExporter: "none"
+
+# =============================================================
+# Per-service secrets - pass via --set when installing each chart
+# =============================================================
+#
+# --- redis ---
+# (uses only global.redisPassword above, no extra --set needed)
+#
+# --- gatewayserver ---
+# (uses only global values above, no extra --set needed)
+#
+# --- auth ---
+#   --set authEncryptionKey="<your-encryption-key>"
+#   --set authKeys.privateKey="$(cat private.pem)"
+#   --set authKeys.publicKey="$(cat public.pem)"
+#   --set usosConsumerKey="<usos-key>"
+#   --set usosConsumerSecret="<usos-secret>"
+#   --set usosCallback="<callback-url>"
+#   --set frontendSuccessUrl="<url>"
+#   --set frontendErrorUrl="<url>"
+#   --set database.rootPassword="<password>"
+#
+# --- groups ---
+#   --set database.rootPassword="<password>"
+#
+# --- grades ---
+#   --set database.rootPassword="<password>"
+#
+# --- attendance ---
+#   --set database.rootPassword="<password>"
+#
+# --- exams ---
+#   --set database.rootPassword="<password>"
+#   --set azureVisionEndpoint="<https://...cognitiveservices.azure.com/>"
+#   --set azureVisionKey="<azure-vision-api-key>"
+#
+# --- summary ---
+# (uses only global values above, no extra --set needed)

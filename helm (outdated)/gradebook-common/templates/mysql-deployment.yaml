@@ -1,0 +1,58 @@
+{{- define "common.mysql-deployment" -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.database.deploymentName }}
+  labels:
+    app: {{ .Values.database.appLabel }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Values.database.appLabel }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.database.appLabel }}
+    spec:
+      containers:
+        - name: {{ .Values.database.appLabel }}
+          image: "{{ .Values.database.image.repository }}:{{ .Values.database.image.tag }}"
+          ports:
+            - containerPort: 3306
+              protocol: TCP
+          env:
+            - name: MYSQL_DATABASE
+              value: {{ .Values.database.name }}
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.database.secretName }}
+                  key: MYSQL_ROOT_PASSWORD
+          volumeMounts:
+            - name: mysql-data
+              mountPath: /var/lib/mysql
+          readinessProbe:
+            exec:
+              command:
+                - mysqladmin
+                - ping
+                - -h
+                - localhost
+            initialDelaySeconds: 60
+            periodSeconds: 10
+          livenessProbe:
+            exec:
+              command:
+                - mysqladmin
+                - ping
+                - -h
+                - localhost
+            initialDelaySeconds: 60
+            periodSeconds: 10
+            failureThreshold: 10
+      volumes:
+        - name: mysql-data
+          persistentVolumeClaim:
+            claimName: {{ .Values.database.appLabel }}-pvc
+{{- end -}}

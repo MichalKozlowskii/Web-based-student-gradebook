@@ -1,0 +1,28 @@
+services:
+  network-deploy-service:
+    networks:
+      - gradebook
+
+  db-config:
+    extends:
+      service: network-deploy-service
+    image: mysql
+    command: >
+      --innodb-buffer-pool-size=64M
+      --innodb-log-buffer-size=8M
+      --max-connections=20
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 10s
+      retries: 10
+      interval: 10s
+      start_period: 10s
+    environment:
+      MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
+
+  microservice-base-config:
+    extends:
+      service: network-deploy-service
+    environment:
+      SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI: "http://auth:8081/jwks.json"
+      SPRING_DATASOURCE_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
