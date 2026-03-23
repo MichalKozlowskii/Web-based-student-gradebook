@@ -31,7 +31,7 @@ resilience4j:
   timelimiter:
     configs:
       default:
-        timeoutDuration: 10s
+        timeoutDuration: 40s
         cancelRunningFuture: false
 
 management:
