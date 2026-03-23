@@ -101,7 +101,7 @@ public class ExamAnalysisServiceImpl implements ExamAnalysisService {
         g.dispose();
 
         try (ByteArrayOutputStream out = new ByteArrayOutputStream()) {
-            ImageIO.write(image, "JPG", out);
+            ImageIO.write(image, "PNG", out);
             return out.toByteArray();
         } catch (IOException e) {
             throw new ImageGenerationException("Image couldn't be generated.");
