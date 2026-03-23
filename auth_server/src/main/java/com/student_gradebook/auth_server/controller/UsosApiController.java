@@ -1,6 +1,7 @@
 package com.student_gradebook.auth_server.controller;
 
 import com.github.scribejava.core.model.OAuth1AccessToken;
+import com.student_gradebook.auth_server.records.StudentNumberResponse;
 import com.student_gradebook.auth_server.records.groups.GroupsResponse;
 import com.student_gradebook.auth_server.records.TermResponse;
 import com.student_gradebook.auth_server.records.groups.ParticipantRecord;
@@ -36,12 +37,12 @@ public class UsosApiController {
         return usosClient.getGroups(accessToken);
     }
 
-    @GetMapping("/fetchStudentDetails/{studentId}")
+    @GetMapping("/fetchStudentNumber/{studentId}")
     @PreAuthorize("hasRole('LECTURER')")
-    public ParticipantRecord fetchStudentDetails(@AuthenticationPrincipal Jwt jwt,
-                                                 @PathVariable("studentId") String studentId) {
+    public StudentNumberResponse fetchStudentDetails(@AuthenticationPrincipal Jwt jwt,
+                                                     @PathVariable("studentId") String studentId) {
         OAuth1AccessToken accessToken = userService.fetchAccessToken(jwt);
 
-        return usosClient.getUserInfo(accessToken, studentId);
+        return usosClient.getStudentNumber(accessToken, studentId);
     }
 }

@@ -27,14 +27,15 @@ public class StudentServiceImpl implements StudentService {
             if (studentOptional.isPresent()) {
                 Student student = studentOptional.get();
                 if (student.getStudentNumber() == null) {
-                    String studentNumber = usosApiFeignClient.fetchStudentDetails(student.getId()).studentNumber();
+                    String studentNumber = usosApiFeignClient.fetchStudentNumber(student.getId()).studentNumber();
                     student.setStudentNumber(studentNumber);
+                    student = studentRepository.save(student);
                 }
                 students.add(student);
                 continue;
             }
 
-            String studentNumber = usosApiFeignClient.fetchStudentDetails(record.id()).studentNumber();
+            String studentNumber = usosApiFeignClient.fetchStudentNumber(record.id()).studentNumber();
 
             Student savedStudent = studentRepository.save(Student.builder()
                     .id(record.id())

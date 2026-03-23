@@ -2,6 +2,7 @@ package com.student_gradebook.groups_service.service;
 
 import com.student_gradebook.groups_service.entity.Student;
 import com.student_gradebook.groups_service.records.ParticipantRecord;
+import com.student_gradebook.groups_service.records.StudentNumberResponse;
 import com.student_gradebook.groups_service.repository.StudentRepository;
 import com.student_gradebook.groups_service.service.client.UsosApiFeignClient;
 import org.junit.jupiter.api.BeforeEach;
@@ -55,15 +56,16 @@ class StudentServiceImplTest {
     @Test
     void findOrSaveParticipants_savesNewStudents() {
         ParticipantRecord participant = new ParticipantRecord("2", "Alice", "Smith", "S456");
+        StudentNumberResponse studentNumberResponse = new StudentNumberResponse("S546");
         Student savedStudent = Student.builder()
                 .id("2")
                 .firstName("Alice")
                 .lastName("Smi")
-                .studentNumber("S456")
+                .studentNumber("S546")
                 .build();
 
         when(studentRepository.findById("2")).thenReturn(Optional.empty());
-        when(usosApiFeignClient.fetchStudentDetails("2")).thenReturn(participant);
+        when(usosApiFeignClient.fetchStudentNumber("2")).thenReturn(studentNumberResponse);
         when(studentRepository.save(any(Student.class))).thenReturn(savedStudent);
 
         List<Student> result = studentService.findOrSaveParticipants(List.of(participant));
@@ -73,10 +75,10 @@ class StudentServiceImplTest {
         assertEquals("2", student.getId());
         assertEquals("Alice", student.getFirstName());
         assertEquals("Smi", student.getLastName());
-        assertEquals("S456", student.getStudentNumber());
+        assertEquals("S546", student.getStudentNumber());
 
         verify(studentRepository).findById("2");
-        verify(usosApiFeignClient).fetchStudentDetails("2");
+        verify(usosApiFeignClient).fetchStudentNumber("2");
         verify(studentRepository).save(any(Student.class));
     }
 
@@ -98,9 +100,11 @@ class StudentServiceImplTest {
                 .studentNumber("S456")
                 .build();
 
+        StudentNumberResponse studentNumberResponse = new StudentNumberResponse("S456");
+
         when(studentRepository.findById("1")).thenReturn(Optional.of(existingStudent));
         when(studentRepository.findById("2")).thenReturn(Optional.empty());
-        when(usosApiFeignClient.fetchStudentDetails("2")).thenReturn(newRecord);
+        when(usosApiFeignClient.fetchStudentNumber("2")).thenReturn(studentNumberResponse);
         when(studentRepository.save(any(Student.class))).thenReturn(savedNewStudent);
 
         List<Student> result = studentService.findOrSaveParticipants(List.of(existingRecord, newRecord));
@@ -111,7 +115,7 @@ class StudentServiceImplTest {
 
         verify(studentRepository).findById("1");
         verify(studentRepository).findById("2");
-        verify(usosApiFeignClient).fetchStudentDetails("2");
+        verify(usosApiFeignClient).fetchStudentNumber("2");
         verify(studentRepository).save(any(Student.class));
     }
 

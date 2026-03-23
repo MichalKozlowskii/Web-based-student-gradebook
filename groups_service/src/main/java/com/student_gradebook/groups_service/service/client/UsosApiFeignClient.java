@@ -3,6 +3,7 @@ package com.student_gradebook.groups_service.service.client;
 import com.student_gradebook.groups_service.config.FeignJwtConfig;
 import com.student_gradebook.groups_service.records.GroupsResponse;
 import com.student_gradebook.groups_service.records.ParticipantRecord;
+import com.student_gradebook.groups_service.records.StudentNumberResponse;
 import com.student_gradebook.groups_service.records.TermResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.context.annotation.Primary;
@@ -23,6 +24,6 @@ public interface UsosApiFeignClient {
     @GetMapping(value = "/fetchGroups", consumes = "application/json")
     GroupsResponse fetchGroups();
 
-    @GetMapping(value = "/fetchStudentDetails/{studentId}", consumes = "application/json")
-    ParticipantRecord fetchStudentDetails(@PathVariable("studentId") String studentId);
+    @GetMapping(value = "/fetchStudentNumber/{studentId}", consumes = "application/json")
+    StudentNumberResponse fetchStudentNumber(@PathVariable("studentId") String studentId);
 }
