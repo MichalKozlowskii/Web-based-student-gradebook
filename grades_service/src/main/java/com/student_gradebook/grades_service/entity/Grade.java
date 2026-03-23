@@ -36,7 +36,7 @@ public class Grade {
     @Column(name = "title", length = 30)
     private String title;
 
-    @Column(name = "grade", length = 3)
+    @Column(name = "grade", length = 5)
     private String grade;
 
     @CreationTimestamp
