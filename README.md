@@ -6,7 +6,7 @@ A web-based student gradebook built with microservice architecture. Features gra
 ## Architecture
 The system consists of 7 backend components built with Spring Boot — 6 microservices and a reactive API Gateway (Spring Cloud Gateway). Most microservices have their own dedicated MySQL database. The summary-service is stateless and aggregates data from other services. Microservices communicate with each other via OpenFeign HTTP clients. Redis is used as a shared store for JWT blacklisting and rate limiting. The frontend is a React SPA served by nginx, which also handles TLS termination and request routing.
 
-### C4 level 2 inspired diagram
+### System components diagram
 ![level2 (1)](https://github.com/user-attachments/assets/d75f77f9-60f7-4873-87ce-4af0d34f89aa)
 
 ### Deployment diagram
