@@ -17,6 +17,6 @@ public interface GradeService {
     List<GradeViewDto> fetchStudentGrades(String studentId, String courseUnitId);
     List<GradeViewDto> fetchLastStudentGrades(String studentId);
     Map<String, List<GradeViewDto>> fetchGradesInGroup(String courseUnitId, Integer groupNumber);
-    Boolean updateGrade(UUID gradeId, GradeEditionDto gradeEditionDto);
-    Boolean deleteGrade(UUID gradeId);
+    void updateGrade(UUID gradeId, GradeEditionDto gradeEditionDto);
+    void deleteGrade(UUID gradeId);
 }

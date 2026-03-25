@@ -1,6 +1,7 @@
 package com.student_gradebook.grades_service.service;
 
 import com.student_gradebook.grades_service.controller.exceptions.NoResponseFromApiException;
+import com.student_gradebook.grades_service.controller.exceptions.ResourceNotFoundException;
 import com.student_gradebook.grades_service.controller.exceptions.UnAuthorizedActionException;
 import com.student_gradebook.grades_service.dto.ExamGradeCreationDto;
 import com.student_gradebook.grades_service.dto.GradeCreationDto;
@@ -143,9 +144,9 @@ public class GradeServiceImpl implements GradeService {
     }
 
     @Override
-    public Boolean updateGrade(UUID gradeId, GradeEditionDto gradeEditionDto) {
-        Grade existing = gradeRepository.findById(gradeId).orElse(null);
-        if (existing == null) return false;
+    public void updateGrade(UUID gradeId, GradeEditionDto gradeEditionDto) {
+        Grade existing = gradeRepository.findById(gradeId).orElseThrow(() ->
+                new ResourceNotFoundException("Grade not found"));
 
         checkPermissionToGrade(existing.getCourseUnitId(), existing.getStudentId());
 
@@ -156,19 +157,15 @@ public class GradeServiceImpl implements GradeService {
             existing.setTitle(gradeEditionDto.getTitle());
         }
         gradeRepository.save(existing);
-
-        return true;
     }
 
     @Override
-    public Boolean deleteGrade(UUID gradeId) {
-        Grade existing = gradeRepository.findById(gradeId).orElse(null);
-        if (existing == null) return false;
+    public void deleteGrade(UUID gradeId) {
+        Grade existing = gradeRepository.findById(gradeId).orElseThrow(() ->
+                new ResourceNotFoundException("Grade not found"));
 
         checkPermissionToGrade(existing.getCourseUnitId(), existing.getStudentId());
 
         gradeRepository.delete(existing);
-
-        return true;
     }
 }

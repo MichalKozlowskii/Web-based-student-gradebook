@@ -63,12 +63,7 @@ public class GradesController {
     @PreAuthorize("hasRole('LECTURER')")
     public ResponseEntity<String> updateGrade(@PathVariable("gradeId") UUID gradeId,
                                             @Valid @RequestBody GradeEditionDto gradeEditionDto) {
-        if (!gradeService.updateGrade(gradeId, gradeEditionDto)) {
-            return ResponseEntity
-                    .status(HttpStatus.NOT_FOUND)
-                    .body("Grade not found!");
-        }
-
+        gradeService.updateGrade(gradeId, gradeEditionDto);
         return ResponseEntity.ok()
                 .body("Grade updated!");
     }
@@ -76,12 +71,8 @@ public class GradesController {
     @DeleteMapping("/delete/{gradeId}")
     @PreAuthorize("hasRole('LECTURER')")
     public ResponseEntity<String> deleteGrade(@PathVariable("gradeId") UUID gradeId) {
-        if (!gradeService.deleteGrade(gradeId)) {
-            return ResponseEntity
-                    .status(HttpStatus.NOT_FOUND)
-                    .body("Grade not found!");
-        }
 
+        gradeService.deleteGrade(gradeId);
         return ResponseEntity.ok()
                 .body("Grade deleted!");
     }

@@ -1,6 +1,7 @@
 package com.student_gradebook.grades_service.service;
 
 import com.student_gradebook.grades_service.controller.exceptions.NoResponseFromApiException;
+import com.student_gradebook.grades_service.controller.exceptions.ResourceNotFoundException;
 import com.student_gradebook.grades_service.controller.exceptions.UnAuthorizedActionException;
 import com.student_gradebook.grades_service.dto.GradeCreationDto;
 import com.student_gradebook.grades_service.dto.GradeEditionDto;
@@ -244,9 +245,8 @@ class GradeServiceImplTest {
         GradeEditionDto dto = new GradeEditionDto();
         dto.setGrade("4.0");
 
-        boolean updated = gradeService.updateGrade(gradeId, dto);
+        gradeService.updateGrade(gradeId, dto);
 
-        assertTrue(updated);
         assertEquals("4.0", existing.getGrade());
         verify(gradeRepository).save(existing);
     }
@@ -259,7 +259,7 @@ class GradeServiceImplTest {
         GradeEditionDto dto = new GradeEditionDto();
         dto.setGrade("4.0");
 
-        assertFalse(gradeService.updateGrade(gradeId, dto));
+        assertThrows(ResourceNotFoundException.class, () -> gradeService.updateGrade(gradeId, dto));
         verify(gradeRepository, never()).save(any());
     }
 
@@ -299,9 +299,8 @@ class GradeServiceImplTest {
         when(gradeRepository.findById(gradeId)).thenReturn(Optional.of(existing));
         when(gradesFeignClient.canGrade("course-1", "student-1")).thenReturn(true);
 
-        boolean deleted = gradeService.deleteGrade(gradeId);
+        gradeService.deleteGrade(gradeId);
 
-        assertTrue(deleted);
         verify(gradeRepository).delete(existing);
     }
 
@@ -310,7 +309,7 @@ class GradeServiceImplTest {
         UUID gradeId = UUID.randomUUID();
         when(gradeRepository.findById(gradeId)).thenReturn(Optional.empty());
 
-        assertFalse(gradeService.deleteGrade(gradeId));
+        assertThrows(ResourceNotFoundException.class, () -> gradeService.deleteGrade(gradeId));
         verify(gradeRepository, never()).delete(any());
     }
 
