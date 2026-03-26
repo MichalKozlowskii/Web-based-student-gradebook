@@ -3,6 +3,9 @@
 ## Description
 A web-based student gradebook built with microservice architecture. Features grade and attendance management, USOS integration via OAuth 1.0a, JWT authentication, and an automated exam grading module powered by Azure Computer Vision OCR. Built with Spring Boot, React, and deployed with Docker.
 
+## Thesis
+This engineering thesis was graded 5/5 by both the supervisor and the reviewer, and defended with a grade of 4.5/5.
+
 ## Architecture
 The system consists of 7 backend components built with Spring Boot — 6 microservices and a reactive API Gateway (Spring Cloud Gateway). Most microservices have their own dedicated MySQL database. The summary-service is stateless and aggregates data from other services. Microservices communicate with each other via OpenFeign HTTP clients. Redis is used as a shared store for JWT blacklisting and rate limiting. The frontend is a React SPA served by nginx, which also handles TLS termination and request routing.
 
