@@ -4,6 +4,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -38,6 +39,10 @@ public class Grade {
 
     @Column(name = "grade", length = 5)
     private String grade;
+
+    @Column(name = "weight")
+    @Size(min = 1, max = 10)
+    private Integer weight = 1;
 
     @CreationTimestamp
     @Column(name = "created_at")
