@@ -71,6 +71,7 @@ public class GradeServiceImpl implements GradeService {
         Grade newGrade = Grade.builder()
                 .title(examGradeCreationDto.getTitle())
                 .grade(examGradeCreationDto.getGrade())
+                .weight(examGradeCreationDto.getWeight())
                 .courseUnitId(examGradeCreationDto.getCourseUnitId())
                 .studentId(studentId)
                 .termId(termService.findActiveTerm().getId())
@@ -93,6 +94,7 @@ public class GradeServiceImpl implements GradeService {
                     .title(gradeListDto.getTitle())
                     .studentId(element.getStudentId())
                     .grade(element.getGrade())
+                    .weight(gradeListDto.getWeight())
                     .termId(activeTerm.getId())
                     .courseUnitId(gradeListDto.getCourseUnitId())
                     .build();
@@ -156,6 +158,10 @@ public class GradeServiceImpl implements GradeService {
         if (gradeEditionDto.getTitle() != null && !gradeEditionDto.getTitle().isBlank()) {
             existing.setTitle(gradeEditionDto.getTitle());
         }
+        if (gradeEditionDto.getWeight() != null) {
+            existing.setWeight(gradeEditionDto.getWeight());
+        }
+
         gradeRepository.save(existing);
     }
 

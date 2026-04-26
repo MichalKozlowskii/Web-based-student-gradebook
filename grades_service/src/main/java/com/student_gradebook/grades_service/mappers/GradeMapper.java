@@ -10,6 +10,7 @@ public class GradeMapper {
                 .id(grade.getId())
                 .title(grade.getTitle())
                 .grade(grade.getGrade())
+                .weight(grade.getWeight())
                 .courseUnitId(grade.getCourseUnitId())
                 .studentId(grade.getStudentId())
                 .termId(grade.getTermId())
@@ -24,6 +25,7 @@ public class GradeMapper {
                 .courseUnitId(gradeCreationDto.getCourseUnitId())
                 .grade(gradeCreationDto.getGrade())
                 .studentId(gradeCreationDto.getStudentId())
+                .weight(gradeCreationDto.getWeight())
                 .build();
     }
 }
