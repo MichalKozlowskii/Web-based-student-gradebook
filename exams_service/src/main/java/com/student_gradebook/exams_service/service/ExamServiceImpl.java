@@ -60,6 +60,7 @@ public class ExamServiceImpl implements ExamService {
         existing.setNumberOfTasks(examDto.getNumberOfTasks());
         existing.setScope(examDto.getScope());
         existing.setCourseUnitId(examDto.getCourseUnitId());
+        existing.setWeight(examDto.getWeight());
 
         examRepository.save(existing);
     }
@@ -85,6 +86,7 @@ public class ExamServiceImpl implements ExamService {
                 .grade(scanResultDto.getGrade())
                 .courseUnitId(exam.getCourseUnitId())
                 .studentNumber(scanResultDto.getStudentNumber())
+                .weight(exam.getWeight())
                 .build();
 
         examsFeignClient.addGradeFromExam(examGradeCreationDto);

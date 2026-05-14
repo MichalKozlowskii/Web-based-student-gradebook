@@ -10,6 +10,7 @@ public class ExamMapper {
                 .courseUnitId(examDto.getCourseUnitId())
                 .scope(examDto.getScope())
                 .numberOfTasks(examDto.getNumberOfTasks())
+                .weight(examDto.getWeight())
                 .build();
     }
 
@@ -21,6 +22,7 @@ public class ExamMapper {
                 .lecturerId(exam.getLecturerId())
                 .scope(exam.getScope())
                 .numberOfTasks(exam.getNumberOfTasks())
+                .weight(exam.getWeight())
                 .lastUpdated(exam.getLastUpdated())
                 .createdAt(exam.getCreatedAt())
                 .build();

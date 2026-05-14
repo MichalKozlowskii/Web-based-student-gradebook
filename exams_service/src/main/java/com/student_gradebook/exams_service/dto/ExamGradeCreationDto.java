@@ -2,6 +2,7 @@ package com.student_gradebook.exams_service.dto;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import lombok.Builder;
 import lombok.Data;
 
@@ -21,4 +22,8 @@ public class ExamGradeCreationDto {
     @NotNull
     @Pattern(regexp = "^(?:0\\.01|0\\.1|2\\.[05]|3\\.[05]|4\\.[05]|5\\.0)$")
     private String grade;
+
+    @NotNull
+    @Size(min = 1, max = 10)
+    private Integer weight;
 }

@@ -4,6 +4,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.hibernate.annotations.*;
 import org.hibernate.type.SqlTypes;
@@ -39,6 +40,10 @@ public class Exam {
 
     @Column(name = "lecturer_id", length = 10)
     private String lecturerId;
+
+    @Column(name = "weight")
+    @Size(min = 1, max = 10)
+    private Integer weight = 1;
 
     @CreationTimestamp
     @Column(name = "created_at")

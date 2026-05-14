@@ -18,10 +18,10 @@ public class ExamGradeCreationDto {
     private String title;
 
     @NotNull
-    @Size(min = 1, max = 10)
-    private Integer weight;
-
-    @NotNull
     @Pattern(regexp = "^(?:0\\.01|0\\.1|2\\.[05]|3\\.[05]|4\\.[05]|5\\.0)$")
     private String grade;
+
+    @NotNull
+    @Size(min = 1, max = 10)
+    private Integer weight;
 }
