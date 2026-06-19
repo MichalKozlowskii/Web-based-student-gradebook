@@ -1,0 +1,72 @@
+services:
+  authdb:
+    container_name: auth_serverDB
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_DATABASE: authdb
+    volumes:
+      - ../authdb:/var/lib/mysql
+    extends:
+      file: common-config.yml
+      service: db-config
+
+  groupsdb:
+    container_name: groups_serviceDB
+    ports:
+      - 3307:3306
+    environment:
+      MYSQL_DATABASE: groupsdb
+    volumes:
+      - ../groupsdb_data:/var/lib/mysql
+    extends:
+      file: common-config.yml
+      service: db-config
+
+  gradesdb:
+    container_name: grades_serviceDB
+    ports:
+      - 3308:3306
+    environment:
+      MYSQL_DATABASE: gradesdb
+    volumes:
+      - ../gradesdb_data:/var/lib/mysql
+    extends:
+      file: common-config.yml
+      service: db-config
+
+  attendancedb:
+    container_name: attendance_serviceDB
+    ports:
+      - 3309:3306
+    environment:
+      MYSQL_DATABASE: attendancedb
+    volumes:
+      - ../attendancedb_data:/var/lib/mysql
+    extends:
+      file: common-config.yml
+      service: db-config
+
+  examsdb:
+    container_name: exams_serviceDB
+    ports:
+      - 3310:3310
+    environment:
+      MYSQL_DATABASE: examsdb
+    volumes:
+      - ../examsdb_data:/var/lib/mysql
+    extends:
+      file: common-config.yml
+      service: db-config
+
+  redis:
+    image: redis:7-alpine
+    container_name: redis
+    ports:
+      - 6379:6379
+    command: redis-server --maxmemory 64mb --maxmemory-policy allkeys-lru --requirepass 123456
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "123456", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
