@@ -1,5 +1,6 @@
 package com.student_gradebook.gateway;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.gateway.filter.ratelimit.KeyResolver;
@@ -15,6 +16,19 @@ import java.time.LocalDateTime;
 
 @SpringBootApplication
 public class GatewayApplication {
+	@Value("${urls.auth}")
+	private String authUrl;
+	@Value("${urls.groups}")
+	private String groupsUrl;
+	@Value("${urls.grades}")
+	private String gradesUrl;
+	@Value("${urls.attendance}")
+	private String attendanceUrl;
+	@Value("${urls.summary}")
+	private String summaryUrl;
+	@Value("${urls.exams}")
+	private String examsUrl;
+
 
 	public static void main(String[] args) {
 		SpringApplication.run(GatewayApplication.class, args);
@@ -22,6 +36,7 @@ public class GatewayApplication {
 
 	@Bean
 	public RouteLocator routeConfig(RouteLocatorBuilder routeLocatorBuilder) {
+
 		return routeLocatorBuilder.routes()
 				.route(p -> p
 						.path("/gradebook/auth/**")
@@ -29,7 +44,7 @@ public class GatewayApplication {
 								.addResponseHeader("X-Gateway-Time", LocalDateTime.now().toString())
 								.circuitBreaker(config -> config.setName("authCircuitBreaker")
 										.setFallbackUri("forward:/serviceNotAvailable")))
-						.uri("http://auth:8081"))
+						.uri(authUrl))
 				.route(p -> p
 						.path("/gradebook/groups/**")
 						.filters( f -> f.rewritePath("/gradebook/groups/(?<segment>.*)","/${segment}")
@@ -40,7 +55,7 @@ public class GatewayApplication {
 								)
 								.circuitBreaker(config -> config.setName("groupsCircuitBreaker")
 										.setFallbackUri("forward:/serviceNotAvailable")))
-						.uri("http://groups:8090"))
+						.uri(groupsUrl))
 				.route(p -> p
 						.path("/gradebook/grades/**")
 						.filters( f -> f.rewritePath("/gradebook/grades/(?<segment>.*)","/${segment}")
@@ -51,7 +66,7 @@ public class GatewayApplication {
 								)
 								.circuitBreaker(config -> config.setName("gradesCircuitBreaker")
 										.setFallbackUri("forward:/serviceNotAvailable")))
-						.uri("http://grades:9000"))
+						.uri(gradesUrl))
 				.route(p -> p
 						.path("/gradebook/attendance/**")
 						.filters( f -> f.rewritePath("/gradebook/attendance/(?<segment>.*)","/${segment}")
@@ -62,7 +77,7 @@ public class GatewayApplication {
 								)
 								.circuitBreaker(config -> config.setName("attendanceCircuitBreaker")
 										.setFallbackUri("forward:/serviceNotAvailable")))
-						.uri("http://attendance:9010"))
+						.uri(attendanceUrl))
 				.route(p -> p
 						.path("/gradebook/summary/**")
 						.filters( f -> f.rewritePath("/gradebook/summary/(?<segment>.*)","/${segment}")
@@ -73,7 +88,7 @@ public class GatewayApplication {
 								)
 								.circuitBreaker(config -> config.setName("summaryCircuitBreaker")
 										.setFallbackUri("forward:/serviceNotAvailable")))
-						.uri("http://summary:9020"))
+						.uri(summaryUrl))
 				.route(p -> p
 						.path("/gradebook/exams/**")
 						.filters( f -> f.rewritePath("/gradebook/exams/(?<segment>.*)","/${segment}")
@@ -84,7 +99,7 @@ public class GatewayApplication {
 								)
 								.circuitBreaker(config -> config.setName("examsCircuitBreaker")
 										.setFallbackUri("forward:/serviceNotAvailable")))
-						.uri("http://exams:9030"))
+						.uri(examsUrl))
 				.build();
 	}
 

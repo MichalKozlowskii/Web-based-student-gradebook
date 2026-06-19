@@ -3,7 +3,7 @@ spring:
     name: auth_server
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/auth_server?serverTimezone=Europe/Warsaw
+    url: jdbc:mysql://localhost:3306/authdb?serverTimezone=Europe/Warsaw
     username: root
     password: admin
   jpa:

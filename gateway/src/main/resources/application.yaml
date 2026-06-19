@@ -69,5 +69,13 @@ logging:
       zalando:
         logbook: trace
 
+urls:
+  auth: http://auth:8081
+  groups: http://groups:8090
+  grades: http://grades:9000
+  attendance: http://attendance:9010
+  summary: http://summary:9020
+  exams: http://exams:9030
+
 server:
   port: 8080

@@ -1,0 +1,12 @@
+spring:
+  data:
+    redis:
+      password: 123456
+
+urls:
+  auth: http://localhost:8081
+  groups: http://localhost:8090
+  grades: http://localhost:9000
+  attendance: http://localhost:9010
+  summary: http://localhost:9020
+  exams: http://localhost:9030

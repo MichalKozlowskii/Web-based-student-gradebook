@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 @FeignClient(
-        name = "cards",
-        url = "http://auth:8081",
+        name = "groups",
+        url = "${urls.auth}",
         configuration = FeignJwtConfig.class,
         fallback = UsosApiFallback.class
 )
